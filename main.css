@@ -2,6 +2,11 @@ html{
     height:100%;
 }
 body{
+    
+    background: -webkit-linear-gradient(to right, #ffd452, #544a7d);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ffd452, #544a7d); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+
+    font-family: sans-serif;
     display:grid;
     margin: 0;
     grid-template-rows: 3rem auto 3rem;
@@ -12,8 +17,25 @@ body{
 }
 .main-header{
     grid-area: header;
-
+    display:flex;
+   
 }
 main{
     grid-area: main;
 }
+.icon-container{
+    display:inline-block;
+    margin: 0 0.5rem;
+
+}
+.bar1, .bar2, .bar3{
+    width: 2rem;
+    height: 0.4rem;
+    background-color: black;
+    margin: 0.4rem 0;
+}
+.icon-text{
+    align-self: center;
+    font-weight: bold;
+}
+
