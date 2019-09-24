@@ -12,7 +12,7 @@ body{
     font-family: sans-serif;
     display:grid;
     margin: 0;
-    grid-template-rows: 3rem auto 3rem;
+    grid-template-rows: 4rem auto 3rem;
     grid-template-areas: "header"
                         "main"
                         "footer";
@@ -21,7 +21,6 @@ body{
 .main-header{
     grid-area: header;
     display:flex;
-   
 }
 main{
     grid-area: main;
@@ -32,7 +31,7 @@ main{
 .icon-container{
     display:inline-block;
     margin: 0 0.5rem;
-
+    align-self: center;
 }
 .bar1, .bar2, .bar3{
     width: 2rem;
@@ -45,18 +44,19 @@ main{
     font-weight: bold;
 }
 .main-container{
-    border: 2px white solid;
+    border: 2px rgba(249,249,249, 0.4) solid;
     border-radius: 25px;
-    background: #f9f9f9;
-    opacity: 0.4;
+    background: rgba(249,249,249, 0.4);
+
     width: 35%;
     height: 60%;
     display:grid;
-    grid-template-rows: 2rem 3rem auto 3rem;
+    grid-template-rows: 3rem 4rem auto 5rem;
     grid-template-areas: "info"
                         "question"
                         "answers"
-                        "buttons"
+                        "buttons";
+    font-weight:bold;
 }
 .info-bar {
     display: flex;
@@ -65,31 +65,56 @@ main{
     align-content: center;
 }
 .info-bar p{
-    font-weight: bold;
-    margin: 0.5rem 0.5rem;
+    margin: 1rem 0.5rem;
     font-size: 1.2rem;
 }
 .question p{
     grid-area: question;
-    margin: 0.5rem;
+    margin: 0.7rem;
     padding-left: 1rem;
-    font-weight: bold;
     font-size: 1.5rem;
+    text-align: center;
 }
 .answers{
     display:inline-block;
+    grid-area: answers;
 }
 .answers-list{
     margin: 0;
-    padding-left: 1rem;
+    padding-left: 2.5rem;
     display: inline-block;
 }
 .answers-list li {
-    margin: 0.5rem;
-    padding: 0.5rem;
+    margin: 1rem;
+    padding: 0.8rem;
     padding-right: 1rem;
     border: 2px solid black;
     border-radius: 10px;
     list-style: none;
-    background-color: white;
+    background:#314141;
+    color:white;
 }
+.answers-list li:hover{
+    background: #9fcf67;
+    border: 2px solid #9fcf67;
+    border-radius: 10px;
+}
+.answers-list li:after{
+    /*Add little V (check)*/
+}
+.buttons{
+    grid-area: buttons;
+    text-align: center;
+}
+.next img, .back img {
+    cursor: pointer;
+    height: 2.5rem;
+    width: 2.5rem;
+    margin: 0.5rem;
+}
+.next, .back{
+    background: none;
+    border: none;
+}
+
+
