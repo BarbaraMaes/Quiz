@@ -1,0 +1,19 @@
+html{
+    height:100%;
+}
+body{
+    display:grid;
+    margin: 0;
+    grid-template-rows: 3rem auto 3rem;
+    grid-template-areas: "header"
+                        "main"
+                        "footer";
+    /*height: 100%;*/
+}
+.main-header{
+    grid-area: header;
+
+}
+main{
+    grid-area: main;
+}
