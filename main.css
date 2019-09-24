@@ -2,12 +2,12 @@ html{
     height:100%;
 }
 body{
-    /*background: -webkit-linear-gradient(to right, #ffd452, #544a7d);  /* Chrome 10-25, Safari 5.1-6 */
-    /*background: linear-gradient(to right, #ffd452, #544a7d); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    background: -webkit-linear-gradient(to right, #ffd452, #544a7d);  /* Chrome 10-25, Safari 5.1-6 */
+    background: linear-gradient(to right, #ffd452, #544a7d); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
-    background: #3E5151;  /* fallback for old browsers */
-    background: -webkit-linear-gradient(to right, #DECBA4, #3E5151);  /* Chrome 10-25, Safari 5.1-6 */
-    background: linear-gradient(to right, #DECBA4, #3E5151); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
+    /*background: #3E5151;  /* fallback for old browsers */
+    /*background: -webkit-linear-gradient(to right, #DECBA4, #3E5151);  /* Chrome 10-25, Safari 5.1-6 */
+    /*background: linear-gradient(to right, #DECBA4, #3E5151); /* W3C, IE 10+/ Edge, Firefox 16+, Chrome 26+, Opera 12+, Safari 7+ */
 
     font-family: sans-serif;
     display:grid;
@@ -46,6 +46,7 @@ main{
 .main-container{
     border: 2px rgba(249,249,249, 0.4) solid;
     border-radius: 25px;
+    box-shadow: 2px 2px 2px 2px rgba(0,0,0, 0.5);
     background: rgba(249,249,249, 0.4);
 
     width: 35%;
@@ -87,16 +88,16 @@ main{
 .answers-list li {
     margin: 1rem;
     padding: 0.8rem;
-    padding-right: 1rem;
-    border: 2px solid black;
+    padding: 0.8rem 1rem;
+    border: 2px solid #355C7D;
     border-radius: 10px;
     list-style: none;
-    background:#314141;
+    background:#355C7D;
     color:white;
 }
 .answers-list li:hover{
-    background: #9fcf67;
-    border: 2px solid #9fcf67;
+    background: #6c9b37;
+    border: 2px solid #6c9b37;
     border-radius: 10px;
 }
 .answers-list li:after{
