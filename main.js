@@ -31,6 +31,8 @@ questions.push(question5);
 
 const btnNext = document.querySelector(".next");
 const btnBack = document.querySelector(".back");
+btnNext.addEventListener("click", nextQuestion);
+btnBack.addEventListener("click", previousQuestion);
 const questionContainer=document.querySelector(".question-text");
 const answerList = document.querySelector(".answers-list");
 const totalQuestions = questions.length;
@@ -57,6 +59,7 @@ function intro(){
     div.appendChild(submit);
     submit.addEventListener("click",function(){
         quiz.username = input.value;
+        quiz.numberOfQuestions = 5;
         ready();
     })
 }
@@ -73,12 +76,9 @@ function ready(){
     div.appendChild(ready);
     ready.addEventListener("click", function(){
         ready.style.display ="none";
-        
         showQuestion(index);
-
     })
 }
-
 
 function infoText(){
     const questionInfo = document.querySelector(".question-info");
@@ -86,11 +86,6 @@ function infoText(){
     questionInfo.innerHTML = "Question : " + (index+1) + " of " + totalQuestions; 
     scoreInfo.innerHTML = "Score : " + score + " of " + totalScore;
 }
-
-
-
-btnNext.addEventListener("click", nextQuestion);
-btnBack.addEventListener("click", previousQuestion);
 
 function nextQuestion(){
     index++;
@@ -135,6 +130,7 @@ function checkAnswer(i){
     if((questions[index].correct)-1 == parseInt(i[i.length-1])){
         document.getElementById(i).classList.add("correct");
         score += 10;
+        quiz.correctAnswers ++;
     }
     else{
         document.getElementById(i).classList.add("incorrect");
