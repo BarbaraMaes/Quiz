@@ -17,10 +17,10 @@ class question {
 
 let index = 0;
 let question1 = new question("random", "random question 1", ["Answer1", "answer2","answer3"], 2);
-let question2 = new question("random", "random question 2", ["Answer1", "answer2","answer3"], 2);
-let question3 = new question("random", "random question 3", ["Answer1", "answer2","answer3"], 2);
+let question2 = new question("random", "random question 2", ["Answer1", "answer2","answer3"], 1);
+let question3 = new question("random", "random question 3", ["Answer1", "answer2","answer3"], 3);
 let question4 = new question("random", "random question 4", ["Answer1", "answer2","answer3"], 2);
-let question5 = new question("random", "random question 5", ["Answer1", "answer2","answer3"], 2);
+let question5 = new question("random", "random question 5", ["Answer1", "answer2","answer3"], 1);
 
 let questions = new Array();
 questions.push(question1);
@@ -38,6 +38,7 @@ const totalScore = 50;
 let score = 0;
 
 intro();
+
 function intro(){
     questionContainer.innerHTML="Welcome to the best quiz ever, let's start with your name: ";
     let div = document.querySelector(".answers");
@@ -102,7 +103,7 @@ function nextQuestion(){
 
 function previousQuestion(){
     index--;
-    if(questions[index] =! null){
+    if(questions[index] != null){
         clearContainer();
         showQuestion(index);
     }
@@ -116,17 +117,28 @@ function clearContainer(){
 function showQuestion(index){
     infoText();
     let q = questions[index];
-   questionContainer.innerHTML = q.question;
+        questionContainer.innerHTML = (index+1) + ". " + q.question;
     for(i = 0; i < q.answers.length; i++){
+        let text = document.createTextNode((i+1) + ". " + q.answers[i]);
         let answer = document.createElement("li");
-        let text = document.createTextNode(q.answers[i]);
+        let check = document.createElement("h2");
+        check.classList.add("check__badge");
         answer.classList.add("answers-list__item");
+        answer.setAttribute("id", "id" + i);
         answer.appendChild(text);
-        answer.addEventListener("click", checkAnswer);
+        answer.appendChild(check);
         answerList.appendChild(answer);
+        answer.addEventListener("click", function(){checkAnswer(answer.id);});
     }
 }
-function checkAnswer(){
-    console.log("you'll always be wrong matey");
-    nextQuestion(index);
+function checkAnswer(i){
+    if((questions[index].correct)-1 == parseInt(i[i.length-1])){
+        document.getElementById(i).classList.add("correct");
+        score += 10;
+    }
+    else{
+        document.getElementById(i).classList.add("incorrect");
+    }
+    setTimeout(function()
+    {nextQuestion(index)}, 1500);
 }
