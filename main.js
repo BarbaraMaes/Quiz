@@ -52,6 +52,7 @@ function intro(){
     input.addEventListener("click", function(){
         input.value="";
     })
+
     let submit = document.createElement("input");
     submit.type="submit";
     submit.value ="Submit";
@@ -61,7 +62,7 @@ function intro(){
         quiz.username = input.value;
         quiz.numberOfQuestions = 5;
         ready();
-    })
+    });
 }
 
 function ready(){
