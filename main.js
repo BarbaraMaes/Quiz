@@ -118,7 +118,6 @@ function showQuestion(index){
         let text = document.createTextNode((i+1) + ". " + q.answers[i]);
         let answer = document.createElement("li");
         let check = document.createElement("h2");
-        check.classList.add("check__badge");
         answer.classList.add("answers-list__item");
         answer.setAttribute("id", "id" + i);
         answer.appendChild(text);
