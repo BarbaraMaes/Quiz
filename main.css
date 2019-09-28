@@ -10,7 +10,6 @@ body{
     grid-template-areas: "header"
                         "main"
                         "footer";
-
     height: 100%;
 }
 .main-header{
@@ -18,7 +17,6 @@ body{
     display:flex;
 }
 main{
-    grid-column: 2/3;
     width: 100%;
     grid-area: main;
     display: grid;
@@ -43,7 +41,7 @@ main{
 .main-container{
     /*width: 50vw;*/
     margin-top: 4rem;
-    
+    margin-left: 15rem;
     max-width: 50rem;
     min-width: 25rem;
     height: fit-content;
@@ -166,11 +164,9 @@ main{
 }
 @media(max-width: 50rem){
 
-    main{
-        align-content: center; 
-    }
     .main-container{
-        max-height: 40rem;
+        max-height: 35rem;
+        margin-left: 0;
     }
 
 }
@@ -178,6 +174,7 @@ main{
     .main-container{
         justify-content: center;
         max-height: 30rem;
+        margin-left: 0;
     }
 }
 
