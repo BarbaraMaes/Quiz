@@ -120,11 +120,23 @@ function clearContainer(){
 
 function showQuestion(index){
     infoText();
-    console.log(elements);
     document.querySelector(".question").appendChild(elements[index][0]);
     for(j = 1; j < elements[index].length; j++){
-        console.log(elements[index][j]);
+        let ele = elements[index][j];
+        let check = j;{
         document.querySelector(".answers-list").appendChild(elements[index][j]);
+        /*for(checking of elements[index]){
+            if((checking.classList.contains("correct")) || checking.classList.contains("incorrect")){
+
+            }
+        } */
+        console.log(elements[index]);
+        ele.addEventListener("click", function clicked(){
+            console.log(elements[index]);
+            ele.removeEventListener("click", clicked);
+            checkAnswer(check,ele);
+            });
+        }
     }
 }
 
@@ -141,24 +153,23 @@ function makeQuestion(){
             let text = document.createTextNode((i+1) + ". " + q.answers[i]);
             let answer = document.createElement("li");
             answer.classList.add("answers-list__item");
-            answer.setAttribute("id", "id" + i);
             answer.appendChild(text);
-          //  answer.addEventListener("click", function(){checkAnswer(i)});
             elements[j][i+1] = answer;
         }
     }
     console.log(elements);
 }
 
-function checkAnswer(i){
-    if((questions[index].correct)-1 == parseInt(i[i.length-1])){
-        document.getElementById(i).classList.add("correct");
-        score += 10;
-        quiz.correctAnswers ++;
+function checkAnswer(check, ele){
+    if(questions[index].correct == check){
+        ele.classList.add("correct");
     }
     else{
-        document.getElementById(i).classList.add("incorrect");
+        ele.classList.add("incorrect");
     }
-    setTimeout(function()
-    {nextQuestion(index)}, 1500);
+    score += 10;
+    quiz.correctAnswers ++;
+
+    /*setTimeout(function()
+    {nextQuestion(index)}, 1500);*/
 }
