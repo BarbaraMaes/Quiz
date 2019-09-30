@@ -1,8 +1,8 @@
 class quiz{
     constructor(username, number){
         this.username = username;
-        this. numberOfQuestions = number;
-        this.correctAnswers = 0;
+        this. questions = number;
+        this.answered = 0;
     }
 }
 
@@ -94,6 +94,7 @@ function ready(){
 function infoText(){
     document.querySelector(".question-info").innerHTML = "Question : " + (index+1) + " of " + totalQuestions;
     document.querySelector(".score-info").innerHTML = "Score : " + score + " of " + totalScore;
+    document.querySelector(".answered").innerHTML = "Answered : " + quiz.answered + " of " + totalQuestions;
 }
 
 function nextQuestion(){
@@ -168,7 +169,7 @@ function checkAnswer(check, ele){
         ele.classList.add("incorrect");
     }
     score += 10;
-    quiz.correctAnswers ++;
+    quiz.answered ++;
 
     /*setTimeout(function()
     {nextQuestion(index)}, 1500);*/
