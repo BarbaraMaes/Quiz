@@ -129,21 +129,26 @@ main{
     color: darkslategray;
     font-size: 1.2rem;
 }
-.answers-list__item:hover{
+/*.answers-list__item:hover{
+    background:  rgba(102, 93, 93, 0.8);
+    border: 2px solid rgba(102, 93, 93, 0.7);
+    border-radius: 10px;
+}*/
+.answers-list__item-clicked{
     background:  rgba(102, 93, 93, 0.8);
     border: 2px solid rgba(102, 93, 93, 0.7);
     border-radius: 10px;
 }
-.answers-list__item:after{
-    /*Add little V (check)*/
-}
-.correct{
+#correct{
     background: rgba(108, 155, 55, 0.8);
     border: 2px solid #6c9b37;
 }
 .incorrect{
     background: rgba(255, 0, 0, 0.452);
     border: 2px solid rgba(255, 0, 0, 0.452);
+}
+#submit-answer{
+    display: none;
 }
 .buttons{
     grid-area: buttons;
@@ -161,6 +166,7 @@ main{
     border:none;
     border-bottom: 3px solid white;
     border-radius: 3px;
+    display: none;
 }
 @media(max-width: 50rem){
 
