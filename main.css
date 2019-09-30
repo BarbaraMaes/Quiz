@@ -100,7 +100,7 @@ main{
 
 .answers{
     display:inline-block;
-    height:100%;
+    height:fit-content;
     display:grid;
     grid-area: answers;
     align-content: start;

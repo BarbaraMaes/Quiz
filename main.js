@@ -1,8 +1,9 @@
 class quiz{
-    constructor(username, number){
+    constructor(username, questions = [], correct,incorrect){
         this.username = username;
-        this. questions = number;
-        this.answered = 0;
+        this.questions = questions;
+        this.correct = correct;
+        this.incorrect = incorrect
     }
 }
 
@@ -15,26 +16,28 @@ class question {
     }
 }
 
-let question1 = new question("random", "random question 1", ["Answer1", "answer2","answer3"], 2);
-let question2 = new question("random", "random question 2", ["Answer1", "answer2","answer3"], 1);
-let question3 = new question("random", "random question 3", ["Answer1", "answer2","answer3"], 3);
-let question4 = new question("random", "random question 4", ["Answer1", "answer2","answer3"], 2);
-let question5 = new question("random", "random question 5", ["Answer1", "answer2","answer3"], 1);
+const question1 = new question("random", "random question 1", ["Answer1", "answer2","answer3"], 2);
+const question2 = new question("random", "random question 2", ["Answer1", "answer2","answer3","answer4"], 1);
+const question3 = new question("random", "random question 3", ["Answer1", "answer2","answer3"], 3);
+const question4 = new question("random", "random question 4", ["Answer1", "answer2","answer3", "answer4"], 2);
+const question5 = new question("random", "random question 5", ["Answer1", "answer2","answer3"], 1);
+
+let thisQuiz = new quiz("",[question1, question2, question3, question4, question5], 0);
 
 let elements = [];
-let questions = [];
-questions.push(question1);
-questions.push(question2);
-questions.push(question3);
-questions.push(question4);
-questions.push(question5);
+//let questions = [];
+//questions.push(question1);
+//questions.push(question2);
+//questions.push(question3);
+//questions.push(question4);
+//questions.push(question5);
 
 const btnNext = document.querySelector(".next");
 const btnBack = document.querySelector(".back");
 btnNext.addEventListener("click", nextQuestion);
 btnBack.addEventListener("click", previousQuestion);
 let index = 0;
-const totalQuestions = questions.length;
+const totalQuestions = thisQuiz.questions.length;
 const totalScore = 50;
 let score = 0;
 intro();
@@ -63,17 +66,38 @@ function intro(){
     submit.setAttribute("class", "submit name");
     document.querySelector(".answers").appendChild(submit);
     submit.addEventListener("click",function(){
-        quiz.username = input.value;
-        quiz.numberOfQuestions = 5;
+        thisQuiz.username = input.value;
         ready();
     });
+}
+function makeQuestion(){
+    console.log(thisQuiz);
+    for(j = 0; j < thisQuiz.questions.length; j++){
+        let q = thisQuiz.questions[j];
+        console.log(q);
+        
+        let question = document.createTextNode((j +1) + ". " + q.question);
+        let container = document.createElement("p");
+        container.classList.add("question-text");
+        container.appendChild(question);
+        elements[j] = [];
+        elements[j][0] = container;
+        for(i = 0; i < q.answers.length; i++){
+            let text = document.createTextNode((i+1) + ". " + q.answers[i]);
+            let answer = document.createElement("li");
+            answer.classList.add("answers-list__item");
+            answer.appendChild(text);
+            elements[j][i+1] = answer;
+        }
+    }
+    console.log(elements);
 }
 
 function ready(){
     clearContainer();
     let container = document.createElement("p"); 
     container.classList.add("question-text");
-    let text = document.createTextNode("Hi " + quiz.username + " ! Are you ready to start the quiz ?");
+    let text = document.createTextNode("Hi " + thisQuiz.username + " ! Are you ready to start the quiz ?");
     container.appendChild(text);
     document.querySelector(".question").appendChild(container);
     
@@ -90,30 +114,6 @@ function ready(){
         showQuestion(index);
     });
 }
-
-function infoText(){
-    document.querySelector(".question-info").innerHTML = "Question : " + (index+1) + " of " + totalQuestions;
-    document.querySelector(".score-info").innerHTML = "Score : " + score + " of " + totalScore;
-    document.querySelector(".answered").innerHTML = "Answered : " + quiz.answered + " of " + totalQuestions;
-}
-
-function nextQuestion(){
-    index++;
-    if(questions[index] != null){
-        console.log(questions[index]);
-        clearContainer();
-        showQuestion(index);
-    }
-}
-
-function previousQuestion(){
-    index--;
-    if(questions[index] != null){
-        clearContainer();
-        showQuestion(index);
-    }
-}
-
 function clearContainer(){
     document.querySelector(".question").innerHTML = "";
     document.querySelector(".answers-list").innerHTML = "";
@@ -132,45 +132,57 @@ function showQuestion(index){
             }
         } */
         console.log(elements[index]);
-        ele.addEventListener("click", function clicked(){
+        /*ele.addEventListener("click", function clicked(){
             console.log(elements[index]);
             ele.removeEventListener("click", clicked);
             checkAnswer(check,ele);
             });
-        }
+        }*/
     }
 }
+}
 
-function makeQuestion(){
-    for(j = 0; j < questions.length; j++){
-        let q = questions[j];
-        let question = document.createTextNode((j +1) + ". " + q.question);
-        let container = document.createElement("p");
-        container.classList.add("question-text");
-        container.appendChild(question);
-        elements[j] = [];
-        elements[j][0] = container;
-        for(i = 0; i < q.answers.length; i++){
-            let text = document.createTextNode((i+1) + ". " + q.answers[i]);
-            let answer = document.createElement("li");
-            answer.classList.add("answers-list__item");
-            answer.appendChild(text);
-            elements[j][i+1] = answer;
-        }
-    }
-    console.log(elements);
+function infoText(){
+    document.querySelector(".question-info").innerHTML = "Question : " + (index+1) + " of " + totalQuestions;
+    document.querySelector(".score-info").innerHTML = "Score : " + score + " of " + totalScore;
+    document.querySelector(".answered").innerHTML = "Answered : " + (thisQuiz.correct + thisQuiz.incorrect) + " of " + totalQuestions;
 }
 
 function checkAnswer(check, ele){
-    if(questions[index].correct == check){
+    if(thisQuiz.questions[index].correct == check){
         ele.classList.add("correct");
+        thisQuiz.correct++;
     }
     else{
         ele.classList.add("incorrect");
+        thisQuiz.incorrect++;
     }
     score += 10;
-    quiz.answered ++;
 
     /*setTimeout(function()
     {nextQuestion(index)}, 1500);*/
 }
+
+function nextQuestion(){
+    index++;
+    if(thisQuiz.questions[index] != null){
+        //console.log(questions[index]);
+        clearContainer();
+        showQuestion(index);
+    }
+}
+
+function previousQuestion(){
+    index--;
+    if(thisQuiz.questions[index] != null){
+        clearContainer();
+        showQuestion(index);
+    }
+}
+
+
+
+
+
+
+
