@@ -39,9 +39,10 @@ main{
     font-weight: bold;
 }
 .main-container{
-    /*width: 50vw;*/
+    width: 50vw;
     margin-top: 4rem;
-    margin-left: 15rem;
+    justify-self: center;
+    /*margin-left: 15rem;*/
     max-width: 50rem;
     min-width: 25rem;
     height: fit-content;
@@ -61,8 +62,8 @@ main{
     justify-content: center;
     align-content: center;
 }
-.info-bar p{
-    margin: 1rem 0.5rem;
+.question-info, .score-info, .answered{
+    margin: 0.5rem 0.8rem;
     font-size: 1.2rem;
 }
 
@@ -150,6 +151,14 @@ main{
 #submit-answer{
     display: none;
 }
+.submit-answer{
+    display:flex; 
+    justify-content: center;
+}
+.clicked{
+    background: lightgrey;
+    border: 2px solid lightgrey;
+}
 .buttons{
     grid-area: buttons;
     display:flex;
@@ -173,14 +182,16 @@ main{
     .main-container{
         max-height: 35rem;
         margin-left: 0;
+        width:auto;
     }
 
 }
 @media(max-width: 30rem){ 
     .main-container{
         justify-content: center;
+        justify-self: auto;
         max-height: 30rem;
-        margin-left: 0;
+        
     }
 }
 

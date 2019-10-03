@@ -1,5 +1,5 @@
 class quiz{
-    constructor(username, questions = [], correct,incorrect){
+    constructor(username, questions = [], correct,incorrect,index){
         this.username = username;
         this.questions = questions;
         this.correct = correct;
@@ -7,17 +7,68 @@ class quiz{
         this.totalQuestions = function(){return this.questions.length;};
         this.totalScore = function(){return (this.questions.length)*10;};
         this.returnElement = function(index){return (this.questions[index].elements);};
-        //this.score = 0;
+        
+        this.index = index;
+
+    }
+    returnAnswered(){
+        let counter = 0;
+        for(question of this.questions){
+            if(question.answered == true){
+                counter++;
+            }
+        }
+        return counter;
+    }
+
+    checkAnswer(clicked){
+        
+        let q = thisQuiz.returnElement(thisQuiz.index);
+        console.log("q" + q);
+        let correctAnswers = thisQuiz.questions[thisQuiz.index].correct;
+        console.log("correct answers" + correctAnswers);
+        if(Array.isArray(correctAnswers)){
+            let logged;
+            for(let correct of correctAnswers){
+                for(let click of clicked){
+                    if(correct == click){
+                        q[click].setAttribute("id","correct");
+                        logged++; 
+                    }
+                    else if(correct != click){q[click].classList.add("incorrect");}
+                } 
+            }
+            if(logged == clicked.length){thisQuiz.correct++;}
+            else{thisQuiz.incorrect++;}
+        }
+        //if correctanswers isn't an array
+        else{
+            if(Array.isArray(clicked)){
+                let counter = 0;
+                for(let click of clicked){
+                    counter++;
+                    if(correctAnswers == click) {q[click].setAttribute("id","correct");}
+                    else{q[click].classList.add("incorrect");}
+                }
+                if(counter <= 1){thisQuiz.correct++;} 
+                else if(counter > 1){thisQuiz.incorrect++;}
+            }
+            else{
+                if(correctAnswers == clicked){q[click].setAttribute("id","correct"); thisQuiz.correct++;}
+                else{q[click].classList.add("incorrect"); thisQuiz.incorrect++;}
+            }
+        }
     }
 }
 
 class question {
-    constructor(category, question, answers = [], correct = [], elements = []){
+    constructor(category, question, answers = [], correct = [], elements = [], answered){
         this.questionCategory = category;
         this.question = question;
         this.answers = answers;
         this.correct = correct;
         this.elements = elements;
+        this.answered = answered;
     }
 }
 
@@ -27,15 +78,12 @@ const question3 = new question("random", "random question 3", ["Answer1", "answe
 const question4 = new question("random", "random question 4", ["Answer1", "answer2","answer3", "answer4"], 2);
 const question5 = new question("random", "random question 5", ["Answer1", "answer2","answer3"], 1);
 
-let thisQuiz = new quiz("",[question1, question2, question3, question4, question5], 0,0);
+let thisQuiz = new quiz("",[question1, question2, question3, question4, question5], 0,0,0);
 
 const btnNext = document.querySelector(".next");
 const btnBack = document.querySelector(".back");
 btnNext.addEventListener("click", nextQuestion);
 btnBack.addEventListener("click", previousQuestion);
-
-//move to quiz class
-let index = 0;
 
 intro();
 
@@ -43,7 +91,7 @@ intro();
 function intro(){
     let container = document.createElement("p"); 
     container.classList.add("question-text");
-    let text = document.createTextNode("Welcome to the best quiz ever, let's start with your name: ");
+    let text = document.createTextNode("Welcome to the best quiz ever! let's start with your name: ");
     container.appendChild(text);
     document.querySelector(".question").appendChild(container);
 
@@ -62,7 +110,13 @@ function intro(){
     submit.setAttribute("class", "submit name");
     document.querySelector(".answers").appendChild(submit);
     submit.addEventListener("click",function(){
-        thisQuiz.username = input.value;
+        //if no name was given we need a default username of USER
+        
+        if(input.value == undefined || input.value == "Type your name here"){
+            thisQuiz.username = "Quizer";}
+        else{
+            thisQuiz.username = input.value;
+        }
         ready();
     });
 }
@@ -72,6 +126,13 @@ function makeQuestion(){
         let q = thisQuiz.questions[j];
         let question = document.createTextNode((j +1) + ". " + q.question);
         let container = document.createElement("p");
+        let submitAnswer = document.createElement("input");
+
+        submitAnswer.setAttribute("type","button");
+        submitAnswer.id = "submit-answer";
+        submitAnswer.classList.add("submit");
+        submitAnswer.value ="Submit";
+
         container.classList.add("question-text");
         container.appendChild(question);
         elements[j] = [];
@@ -83,9 +144,11 @@ function makeQuestion(){
             answer.appendChild(text);
             elements[j][i+1] = answer;
         }
+        elements[j].push(submitAnswer);
         q.elements = elements[j];
+        console.log(elements[j]);
     }
-    showQuestion(index);
+    showQuestion();
 }
 
 function ready(){
@@ -114,53 +177,61 @@ function ready(){
 function clearContainer(){
     document.querySelector(".question").innerHTML = "";
     document.querySelector(".answers-list").innerHTML = "";
+    document.querySelector(".submit-answer").innerHTML ="";
 }
 
-function showQuestion(index){
+function showQuestion(){
     let clicked = [];
     infoText();
-    let btnSubmit = document.getElementById("submit-answer");
-    btnSubmit.value =" submit ";
-    btnSubmit.style.display = "block";
-    let disable = false;
 
-    let q = thisQuiz.returnElement(index);
+    let q = thisQuiz.returnElement(thisQuiz.index);
     document.querySelector(".question").appendChild(q[0]);
 
-    for(j = 1; j < q.length; j++){
-        document.querySelector(".answers-list").appendChild(q[j]);
-        let i = j;
-        /*if(q[i].classList.contains("incorrect")|| q[i].id == "correct"){
-            btnSubmit.onclick = null;
-            disable = true;
-        }*/
-        if(!disable){
-            q[j].addEventListener("click", function listener(){
+    q[q.length-1].style.display ="block";
+    document.querySelector(".submit-answer").appendChild(q[q.length -1]);
+   
+    for(j = 0; j < q.length -2; j++){
+        document.querySelector(".answers-list").appendChild(q[j+1]);
+        let i = j+1;
+        let timesClicked = 0;
+        q[i].onclick = function(){
+        if(timesClicked % 2 == 0){
             q[i].classList.add("answers-list__item-clicked");
             clicked.push(i);
-            //q[i].removeEventListener("click", listener);
-            });
-        } 
-    } 
+            }
+        else if(
+            timesClicked % 2 != 0){q[i].classList.remove("answers-list__item-clicked");
+            let place = clicked.indexOf(i);
+            clicked.splice(place, 1);
+            }
+        timesClicked++;
+        }
 
-    /*if(!disable){
-        btnSubmit.onclick = function(){
-            console.log("clicked button");
-            checkAnswer(clicked);
-            infoText();
-            }; 
-    }*/
+        if(q[q.length-1].classList.contains("clicked")){q[i].onclick = null;}
+    }     
+    
+    if(q[q.length-1].classList.contains("clicked") !=true){
+        let btn = q[q.length-1];
+        btn.onclick = function(){
+        thisQuiz.checkAnswer(clicked);
+        thisQuiz.questions[thisQuiz.index].answered = true;
+        infoText();
+        btn.onclick = null;
+        btn.classList.add("clicked");
+        }
+    }
 }
 
 function infoText(){
-    document.querySelector(".question-info").innerHTML = "Question : " + (index+1) + " of " + thisQuiz.totalQuestions();
-    document.querySelector(".score-info").innerHTML = "Score : " + (thisQuiz.correct)*10 + " of " + thisQuiz.totalScore();
-    document.querySelector(".answered").innerHTML = "Answered : " + (thisQuiz.correct + thisQuiz.incorrect) + " of " + thisQuiz.totalQuestions();
+    document.querySelector(".question-info").innerHTML = "Question : <br\>" + (thisQuiz.index+1) + " of " + thisQuiz.totalQuestions();
+    document.querySelector(".score-info").innerHTML = "Score : <br\>" + (thisQuiz.correct)*10 + " of " + thisQuiz.totalScore();
+    document.querySelector(".answered").innerHTML = "Answered : <br\>" + (thisQuiz.returnAnswered()) + " of " + thisQuiz.totalQuestions();
 }
 
-function checkAnswer(clicked){
-    let q = thisQuiz.returnElement(index);
-    let correctAnswers = thisQuiz.questions[index].correct;
+/*function checkAnswer(clicked){
+    let q = thisQuiz.returnElement(thisQuiz.index);
+    console.log("q" + q);
+    let correctAnswers = thisQuiz.questions[thisQuiz.index].correct;
     if(Array.isArray(correctAnswers)){
         let logged;
         for(let correct of correctAnswers){
@@ -169,51 +240,38 @@ function checkAnswer(clicked){
                     q[click].setAttribute("id","correct");
                     logged++; 
                 }
-                else if(correct != click){
-                    q[click].classList.add("incorrect");
-                }
+                else if(correct != click){q[click].classList.add("incorrect");}
             } 
         }
-        if(logged == clicked.length){
-            console.log("Arrcorrect");
-            thisQuiz.correct++;
-        }
-        else{
-            console.log("Arrincorrect");
-            thisQuiz.incorrect++;
-        }
+        if(logged == clicked.length){thisQuiz.correct++;}
+        else{thisQuiz.incorrect++;}
     }
     //if correctanswers isn't an array
     else{
-        if(correctAnswers == clicked){ 
-            console.log("correct");
-            q[clicked].setAttribute("id","correct"); 
-            thisQuiz.correct++;
+        let counter = 0;
+        for(let click of clicked){
+            if(correctAnswers == click){q[click].setAttribute("id","correct");}
+            else{q[click].classList.add("incorrect");}
         }
-        else{
-            console.log("correct");
-            q[clicked].classList.add("incorrect");
-            thisQuiz.incorrect++;
-        }
-    }
 
-    /*setTimeout(function()
-    {nextQuestion(index)}, 1500);*/
-}
+        if(counter == 1){thisQuiz.correct++;} 
+        else if(counter > 1){ thisQuiz.incorrect++;}
+    }
+}*/
 
 function nextQuestion(){
-    index++;
-    if(thisQuiz.questions[index] != null){
+    thisQuiz.index++;
+    if(thisQuiz.questions[thisQuiz.index] != null){
         clearContainer();
-        showQuestion(index);
+        showQuestion();
     }
 }
 
 function previousQuestion(){
-    index--;
-    if(thisQuiz.questions[index] != null){
+    thisQuiz.index--;
+    if(thisQuiz.questions[thisQuiz.index] != null){
         clearContainer();
-        showQuestion(index);
+        showQuestion();
     }
 }
 
