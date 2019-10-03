@@ -6,10 +6,9 @@ body{
     font-family: sans-serif;
     display:grid;
     margin: 0;
-    grid-template-rows: 4rem auto 3rem;
+    grid-template-rows: 4rem auto;
     grid-template-areas: "header"
-                        "main"
-                        "footer";
+                        "main";
     height: 100%;
 }
 .main-header{
@@ -92,6 +91,8 @@ main{
     height: 3rem;
     margin: 1rem;
     background: #383127;
+    /*background: none;*/
+    /*border: none;*/
     border: 2px solid #383127;
     border-radius: 10px;
     color:white;
@@ -130,11 +131,7 @@ main{
     color: darkslategray;
     font-size: 1.2rem;
 }
-/*.answers-list__item:hover{
-    background:  rgba(102, 93, 93, 0.8);
-    border: 2px solid rgba(102, 93, 93, 0.7);
-    border-radius: 10px;
-}*/
+
 .answers-list__item-clicked{
     background:  rgba(102, 93, 93, 0.8);
     border: 2px solid rgba(102, 93, 93, 0.7);
@@ -176,6 +173,36 @@ main{
     border-bottom: 3px solid white;
     border-radius: 3px;
     display: none;
+}
+.next:focus , .back:focus{
+    outline:none;
+}
+
+.question-list__container{
+    grid-area: main;
+    display:none;
+    background: rgba(255, 255, 255,0.5);
+    width: 30%;
+    min-width: 20rem;
+    z-index : 30;
+    border: 2px solid black;
+    box-shadow: 2px rgba(102, 93, 93, 0.8);
+    border-radius: 0 15px 0;
+}
+.question-list{
+    padding: 1rem;
+    margin-left: 1rem;
+    list-style: none;
+}
+.question-list li{
+    margin: 0.5rem;
+    padding: 0.5rem;
+    font-size: 1.2rem;
+    border-bottom: 2px solid black;
+}
+
+.question-list li:hover{
+    color:blue;
 }
 @media(max-width: 50rem){
 

@@ -82,11 +82,12 @@ let thisQuiz = new quiz("",[question1, question2, question3, question4, question
 
 const btnNext = document.querySelector(".next");
 const btnBack = document.querySelector(".back");
+const icon = document.querySelector(".icon-container");
+
 btnNext.addEventListener("click", nextQuestion);
 btnBack.addEventListener("click", previousQuestion);
 
 intro();
-
 
 function intro(){
     let container = document.createElement("p"); 
@@ -126,6 +127,7 @@ function makeQuestion(){
         let q = thisQuiz.questions[j];
         let question = document.createTextNode((j +1) + ". " + q.question);
         let container = document.createElement("p");
+        
         let submitAnswer = document.createElement("input");
 
         submitAnswer.setAttribute("type","button");
@@ -148,6 +150,7 @@ function makeQuestion(){
         q.elements = elements[j];
         console.log(elements[j]);
     }
+    icon.addEventListener("click", toggleQuestionList);
     showQuestion();
 }
 
@@ -171,6 +174,7 @@ function ready(){
         btnNext.style.display = "initial";
         btnBack.style.display = "initial";
         clearContainer();
+        fillQuestionList();
         makeQuestion();
     });
 }
@@ -228,37 +232,6 @@ function infoText(){
     document.querySelector(".answered").innerHTML = "Answered : <br\>" + (thisQuiz.returnAnswered()) + " of " + thisQuiz.totalQuestions();
 }
 
-/*function checkAnswer(clicked){
-    let q = thisQuiz.returnElement(thisQuiz.index);
-    console.log("q" + q);
-    let correctAnswers = thisQuiz.questions[thisQuiz.index].correct;
-    if(Array.isArray(correctAnswers)){
-        let logged;
-        for(let correct of correctAnswers){
-            for(let click of clicked){
-                if(correct == click){
-                    q[click].setAttribute("id","correct");
-                    logged++; 
-                }
-                else if(correct != click){q[click].classList.add("incorrect");}
-            } 
-        }
-        if(logged == clicked.length){thisQuiz.correct++;}
-        else{thisQuiz.incorrect++;}
-    }
-    //if correctanswers isn't an array
-    else{
-        let counter = 0;
-        for(let click of clicked){
-            if(correctAnswers == click){q[click].setAttribute("id","correct");}
-            else{q[click].classList.add("incorrect");}
-        }
-
-        if(counter == 1){thisQuiz.correct++;} 
-        else if(counter > 1){ thisQuiz.incorrect++;}
-    }
-}*/
-
 function nextQuestion(){
     thisQuiz.index++;
     if(thisQuiz.questions[thisQuiz.index] != null){
@@ -275,6 +248,39 @@ function previousQuestion(){
     }
 }
 
+function fillQuestionList(){
+    let container = document.querySelector(".question-list");
+    for(j = 0; j < thisQuiz.questions.length; j++){
+        let q = thisQuiz.questions[j];
+        let question = document.createTextNode((j+1) + ". " + q.question);
+        let listItem = document.createElement("li");
+        call = j +1;
+        listItem.addEventListener("click", function(){
+            console.log("showing question :" + call);
+            //thisQuiz.index = call -1;
+            //nextQuestion();
+        });
+        console.log(listItem);
+        listItem.appendChild(question);
+        container.appendChild(listItem);
+    }
+}
+
+function toggleQuestionList(){
+    let container = document.querySelector(".question-list__container");
+    console.log(container);
+    let display = window.getComputedStyle(container).getPropertyValue("display");
+    console.log(display);
+
+    if(display === "none"){
+        console.log("showing");
+        container.style.display="block";
+    }
+    else if(display === "block"){
+        console.log("hiding");
+        container.style.display ="none";
+    }
+}
 
 
 
