@@ -48,16 +48,14 @@ class quiz{
 
     checkAnswer(clicked){
         let q = thisQuiz.returnElement(thisQuiz.index);
-        console.log("q" + q);
         let correctAnswers = thisQuiz.questions[thisQuiz.index].correct;
-        console.log("correct answers" + correctAnswers);
-        let counter;
+        let counter = 0;
         if(Array.isArray(correctAnswers)){
             for(let correct of correctAnswers){
                 for(let click of clicked){
                     if(correct == click){
                         q[click].setAttribute("id","correct");
-                        logged++; 
+                        counter++; 
                     }
                     else if(correct != click){q[click].classList.add("incorrect");}
                 } 
@@ -174,7 +172,6 @@ function makeQuestion(){
     let elements = [];
     for(j = 0; j < thisQuiz.questions.length; j++){
         let q = thisQuiz.questions[j];
-        console.log(q);
         let question = document.createTextNode((j +1) + ". " + q.question);
         let container = document.createElement("p");
         
@@ -274,6 +271,13 @@ function previousQuestion(){
 }
 
 function fillQuestionList(){
+    document.querySelector(".icon-text").style.color ="black";
+    let bars = document.querySelectorAll(".bar");
+    for(bar of bars){
+        bar.style.backgroundColor="black";
+    }
+    
+
     let container = document.querySelector(".question-list");
     for(j = 0; j < thisQuiz.questions.length; j++){
         let q = thisQuiz.questions[j];
@@ -285,7 +289,6 @@ function fillQuestionList(){
             clearContainer();
             showQuestion();
         });
-        console.log(listItem);
         listItem.appendChild(question);
         container.appendChild(listItem);
     }

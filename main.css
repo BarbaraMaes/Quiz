@@ -1,8 +1,14 @@
 *{
     font-family: 'Montserrat', sans-serif;
 }
+html, body{
+    width: 100vw;
+    overflow-x: hidden;
+    justify-content: center;
+}
 html{
     height:100vh;
+    font-size: 0.8rem;
 }
 body{
     background: #E4DBBF;
@@ -30,16 +36,17 @@ main{
     margin: 0 0.5rem;
     align-self: center;
 }
-.bar1, .bar2, .bar3{
+.bar{
     width: 2rem;
     height: 0.4rem;
-    background-color: black;
+    background-color: grey;
     border-radius: 8px;
     margin: 0.4rem 0;
 }
 .icon-text{
     align-self: center;
     font-weight: bold;
+    color:grey;
 }
 .main-container{
     width: 100vw;
@@ -49,7 +56,7 @@ main{
     max-width: 50rem;
     min-width: 25rem;
     height: fit-content;
-    max-height: 35rem;
+    max-height: 30rem;
     display: grid;
     grid-template-rows: 3rem 4rem 1fr 5rem;
     grid-template-areas: "info"
@@ -219,13 +226,24 @@ main{
 .question-list li:hover{
     color:blue;
 }
-
-@media screen and (max-width: 768px){
-    html, body{
-        width: 100vw;
-        overflow-x: hidden;
-        justify-content: center;
+@media(min-width: 567px){ 
+    html{
+        font-size: 1rem;
     }
+    .main-container{
+        max-height: 35rem;
+    }
+    .main-header{
+        margin-left: 1rem;
+    }
+}
+
+@media screen and (min-width: 768px){
+    html,body{
+    width: 100vw;
+    justify-content: initial;
+    }
+
     .question-list__container{
         min-width: 20rem;
     }
@@ -234,16 +252,10 @@ main{
         margin-left: 0;
     }
     .main-header{
+        justify-content: start;
         margin-left: 1rem;
     }
 }
-@media(max-width: 567px){ 
-    html{
-        font-size: 0.8rem;
-    }
-    .main-container{
-        max-height: 30rem;
-    }
-}
+
 
 
