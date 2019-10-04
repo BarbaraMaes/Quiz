@@ -58,7 +58,7 @@ main{
     height: fit-content;
     max-height: 30rem;
     display: grid;
-    grid-template-rows: 3rem 4rem 1fr 5rem;
+    grid-template-rows: 4rem 4rem 1fr 5rem;
     grid-template-areas: "info"
                         "question"
                         "answers"
