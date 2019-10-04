@@ -6,6 +6,7 @@ body{
     font-family: sans-serif;
     display:grid;
     margin: 0;
+    padding: 0;
     grid-template-rows: 4rem auto;
     grid-template-areas: "header"
                         "main";
@@ -181,13 +182,13 @@ main{
 .question-list__container{
     grid-area: main;
     display:none;
-    background: rgba(255, 255, 255,0.5);
+    background: rgb(236, 229, 229);
     width: 30%;
     min-width: 20rem;
     z-index : 30;
     border: 2px solid black;
-    box-shadow: 2px rgba(102, 93, 93, 0.8);
-    border-radius: 0 15px 0;
+    box-shadow: 2px rgba(102, 93, 93);
+    border-radius: 0 15px 0 0;
 }
 .question-list{
     padding: 1rem;
@@ -200,12 +201,32 @@ main{
     font-size: 1.2rem;
     border-bottom: 2px solid black;
 }
-
+.backdrop {
+    display:none;
+    position: fixed;
+    /*opacity: 0; */
+    /*transition: opacity 0.2s linear;*/
+    top: 0;
+    bottom: 0; 
+    z-index: 20;
+    height: 100vh; 
+    width: 100vw;
+    background: rgba(0,0,0,0.5);
+}
 .question-list li:hover{
     color:blue;
 }
-@media(max-width: 50rem){
-
+@media screen and (max-width: 50rem){
+    main{
+        
+    }
+    html, body{
+        max-width: 100%;
+        overflow-x: hidden;
+    }
+    .question-list__container{
+        min-width: 15rem;
+    }
     .main-container{
         max-height: 35rem;
         margin-left: 0;
@@ -215,8 +236,7 @@ main{
 }
 @media(max-width: 30rem){ 
     .main-container{
-        justify-content: center;
-        justify-self: auto;
+        justify-self: center;
         max-height: 30rem;
         
     }

@@ -1,5 +1,30 @@
+function loadJSON(file, callback) {
+
+    let xobj = new XMLHttpRequest();
+    xobj.overrideMimeType("application/json");
+    xobj.open('GET', "questions.json", false);
+    xobj.onreadystatechange = function() {
+        if (xobj.readyState == 4 && xobj.status == "200") {
+
+            // .open will NOT return a value but simply returns undefined in async mode so use a callback
+            callback(xobj.responseText);
+
+        }
+    }
+    xobj.send(null);
+}
+
+function getJSON (file) {
+    let result = null;
+    // Call to function with anonymous callback
+    loadJSON(file, function(response) {
+        result = JSON.parse(response);
+    });
+    return result;
+}
+
 class quiz{
-    constructor(username, questions = [], correct,incorrect,index){
+    constructor(username = "Quizer", questions = [], correct = "0",incorrect ="0",index = "0"){
         this.username = username;
         this.questions = questions;
         this.correct = correct;
@@ -62,8 +87,8 @@ class quiz{
 }
 
 class question {
-    constructor(category, question, answers = [], correct = [], elements = [], answered){
-        this.questionCategory = category;
+    constructor(category, question, answers = [], correct = [], elements = [], answered ="false"){
+        this.category = category;
         this.question = question;
         this.answers = answers;
         this.correct = correct;
@@ -72,20 +97,22 @@ class question {
     }
 }
 
-const question1 = new question("random", "random question 1", ["Answer1", "answer2","answer3"], 2);
-const question2 = new question("random", "random question 2", ["Answer1", "answer2","answer3","answer4"], [1, 4]);
-const question3 = new question("random", "random question 3", ["Answer1", "answer2","answer3"], 3);
-const question4 = new question("random", "random question 4", ["Answer1", "answer2","answer3", "answer4"], 2);
-const question5 = new question("random", "random question 5", ["Answer1", "answer2","answer3"], 1);
+const json = getJSON("questions.json");
+let thisQuiz = new quiz;
 
-let thisQuiz = new quiz("",[question1, question2, question3, question4, question5], 0,0,0);
+for(let item of json){
+    let x = new question(item.category, item.question, item.answers, item.correct);
+    thisQuiz.questions.push(x);
+}
 
 const btnNext = document.querySelector(".next");
 const btnBack = document.querySelector(".back");
 const icon = document.querySelector(".icon-container");
+const backdrop = document.querySelector(".backdrop");
 
 btnNext.addEventListener("click", nextQuestion);
 btnBack.addEventListener("click", previousQuestion);
+backdrop.addEventListener("click", toggleQuestionList);
 
 intro();
 
@@ -111,13 +138,7 @@ function intro(){
     submit.setAttribute("class", "submit name");
     document.querySelector(".answers").appendChild(submit);
     submit.addEventListener("click",function(){
-        //if no name was given we need a default username of USER
-        
-        if(input.value == undefined || input.value == "Type your name here"){
-            thisQuiz.username = "Quizer";}
-        else{
-            thisQuiz.username = input.value;
-        }
+        thisQuiz.username = "Quizer";
         ready();
     });
 }
@@ -125,6 +146,7 @@ function makeQuestion(){
     let elements = [];
     for(j = 0; j < thisQuiz.questions.length; j++){
         let q = thisQuiz.questions[j];
+        console.log(q);
         let question = document.createTextNode((j +1) + ". " + q.question);
         let container = document.createElement("p");
         
@@ -148,7 +170,6 @@ function makeQuestion(){
         }
         elements[j].push(submitAnswer);
         q.elements = elements[j];
-        console.log(elements[j]);
     }
     icon.addEventListener("click", toggleQuestionList);
     showQuestion();
@@ -254,12 +275,13 @@ function fillQuestionList(){
         let q = thisQuiz.questions[j];
         let question = document.createTextNode((j+1) + ". " + q.question);
         let listItem = document.createElement("li");
-        call = j +1;
         listItem.addEventListener("click", function(){
-            console.log("showing question :" + call);
-            //thisQuiz.index = call -1;
-            //nextQuestion();
+            thisQuiz.index = this.innerHTML[0] -1;
+            toggleQuestionList();
+            clearContainer();
+            showQuestion();
         });
+
         console.log(listItem);
         listItem.appendChild(question);
         container.appendChild(listItem);
@@ -268,17 +290,15 @@ function fillQuestionList(){
 
 function toggleQuestionList(){
     let container = document.querySelector(".question-list__container");
-    console.log(container);
     let display = window.getComputedStyle(container).getPropertyValue("display");
-    console.log(display);
-
+    let backdrop = document.querySelector(".backdrop");
     if(display === "none"){
-        console.log("showing");
         container.style.display="block";
+        backdrop.style.display="block";
     }
     else if(display === "block"){
-        console.log("hiding");
         container.style.display ="none";
+        backdrop.style.display="none";
     }
 }
 
