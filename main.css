@@ -1,9 +1,11 @@
+*{
+    font-family: 'Montserrat', sans-serif;
+}
 html{
-    height:100%;
+    height:100vh;
 }
 body{
     background: #E4DBBF;
-    font-family: sans-serif;
     display:grid;
     margin: 0;
     padding: 0;
@@ -17,10 +19,11 @@ body{
     display:flex;
 }
 main{
-    width: 100%;
+    justify-content: stretch;
+    margin: 0;
+    padding: 0;
     grid-area: main;
     display: grid;
-    align-content: top;
 }
 .icon-container{
     display:inline-block;
@@ -39,7 +42,7 @@ main{
     font-weight: bold;
 }
 .main-container{
-    width: 50vw;
+    width: 100vw;
     margin-top: 4rem;
     justify-self: center;
     /*margin-left: 15rem;*/
@@ -70,7 +73,7 @@ main{
 .question-text{
     grid-area: question;
     margin: 0.7rem;
-    font-size: 1.5rem;
+    font-size: 1.4rem;
     text-align: center;
     color:#383127;
 }
@@ -130,7 +133,7 @@ main{
     background: rgb(228, 219, 191);
     background:rgba(220, 91, 33, 0.2);
     color: darkslategray;
-    font-size: 1.2rem;
+    font-size: 1rem;
 }
 
 .answers-list__item-clicked{
@@ -216,29 +219,31 @@ main{
 .question-list li:hover{
     color:blue;
 }
-@media screen and (max-width: 50rem){
-    main{
-        
-    }
+
+@media screen and (max-width: 768px){
     html, body{
-        max-width: 100%;
+        width: 100vw;
         overflow-x: hidden;
+        justify-content: center;
     }
     .question-list__container{
-        min-width: 15rem;
+        min-width: 20rem;
     }
     .main-container{
-        max-height: 35rem;
+        max-height: 40rem;
         margin-left: 0;
-        width:auto;
     }
-
+    .main-header{
+        margin-left: 1rem;
+    }
 }
-@media(max-width: 30rem){ 
+@media(max-width: 567px){ 
+    html{
+        font-size: 0.8rem;
+    }
     .main-container{
-        justify-self: center;
         max-height: 30rem;
-        
     }
 }
+
 

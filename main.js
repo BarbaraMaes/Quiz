@@ -47,13 +47,12 @@ class quiz{
     }
 
     checkAnswer(clicked){
-        
         let q = thisQuiz.returnElement(thisQuiz.index);
         console.log("q" + q);
         let correctAnswers = thisQuiz.questions[thisQuiz.index].correct;
         console.log("correct answers" + correctAnswers);
+        let counter;
         if(Array.isArray(correctAnswers)){
-            let logged;
             for(let correct of correctAnswers){
                 for(let click of clicked){
                     if(correct == click){
@@ -63,13 +62,13 @@ class quiz{
                     else if(correct != click){q[click].classList.add("incorrect");}
                 } 
             }
-            if(logged == clicked.length){thisQuiz.correct++;}
+            if(counter == clicked.length){thisQuiz.correct++;}
             else{thisQuiz.incorrect++;}
         }
         //if correctanswers isn't an array
         else{
             if(Array.isArray(clicked)){
-                let counter = 0;
+                counter = 0;
                 for(let click of clicked){
                     counter++;
                     if(correctAnswers == click) {q[click].setAttribute("id","correct");}
@@ -119,8 +118,7 @@ intro();
 function intro(){
     let container = document.createElement("p"); 
     container.classList.add("question-text");
-    let text = document.createTextNode("Welcome to the best quiz ever! let's start with your name: ");
-    container.appendChild(text);
+    container.appendChild(document.createTextNode("Welcome to the best quiz ever! let's start with your name: "));
     document.querySelector(".question").appendChild(container);
 
     let input = document.createElement('input');
@@ -142,6 +140,36 @@ function intro(){
         ready();
     });
 }
+
+function ready(){
+    clearContainer();
+    let container = document.createElement("p"); 
+    container.classList.add("question-text");
+
+    container.appendChild(document.createTextNode("Hi "  + thisQuiz.username + " ! "));
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createTextNode("Are you ready to start the quiz ?"));
+    
+   
+    document.querySelector(".question").appendChild(container);
+    
+    document.querySelector(".input-name").style.display ="none";
+    document.querySelector(".name").style.display="none";
+    let ready = document.createElement("input");
+    ready.type= "submit";
+    ready.value= " Yes ! ";
+    ready.setAttribute("class", "submit");
+    document.querySelector(".answers").appendChild(ready);
+    ready.addEventListener("click", function(){
+        ready.style.display ="none";
+        btnNext.style.display = "initial";
+        btnBack.style.display = "initial";
+        clearContainer();
+        fillQuestionList();
+        makeQuestion();
+    });
+}
+
 function makeQuestion(){
     let elements = [];
     for(j = 0; j < thisQuiz.questions.length; j++){
@@ -175,30 +203,6 @@ function makeQuestion(){
     showQuestion();
 }
 
-function ready(){
-    clearContainer();
-    let container = document.createElement("p"); 
-    container.classList.add("question-text");
-    let text = document.createTextNode("Hi " + thisQuiz.username + " ! Are you ready to start the quiz ?");
-    container.appendChild(text);
-    document.querySelector(".question").appendChild(container);
-    
-    document.querySelector(".input-name").style.display ="none";
-    document.querySelector(".name").style.display="none";
-    let ready = document.createElement("input");
-    ready.type= "submit";
-    ready.value= " Yes ! ";
-    ready.setAttribute("class", "submit");
-    document.querySelector(".answers").appendChild(ready);
-    ready.addEventListener("click", function(){
-        ready.style.display ="none";
-        btnNext.style.display = "initial";
-        btnBack.style.display = "initial";
-        clearContainer();
-        fillQuestionList();
-        makeQuestion();
-    });
-}
 function clearContainer(){
     document.querySelector(".question").innerHTML = "";
     document.querySelector(".answers-list").innerHTML = "";
@@ -248,7 +252,7 @@ function showQuestion(){
 }
 
 function infoText(){
-    document.querySelector(".question-info").innerHTML = "Question : <br\>" + (thisQuiz.index+1) + " of " + thisQuiz.totalQuestions();
+    document.querySelector(".question-info").innerHTML = "Question : <br\>" + parseInt(thisQuiz.index +1) + " of " + thisQuiz.totalQuestions();
     document.querySelector(".score-info").innerHTML = "Score : <br\>" + (thisQuiz.correct)*10 + " of " + thisQuiz.totalScore();
     document.querySelector(".answered").innerHTML = "Answered : <br\>" + (thisQuiz.returnAnswered()) + " of " + thisQuiz.totalQuestions();
 }
@@ -281,7 +285,6 @@ function fillQuestionList(){
             clearContainer();
             showQuestion();
         });
-
         console.log(listItem);
         listItem.appendChild(question);
         container.appendChild(listItem);
