@@ -236,6 +236,7 @@ function showQuestion(){
         let i = j+1;
         let timesClicked = 0;
         q[i].onclick = function(){
+            console.log(thisQuiz.questions[thisQuiz.index].answered);
             if(thisQuiz.questions[thisQuiz.index].answered == false){
                 let btn = q[q.length-1];
                 btn.classList.remove("clicked");
@@ -259,18 +260,6 @@ function showQuestion(){
     document.querySelector(".answers-list").onclick = function(){toggleButton(clicked);}    
 }
 
-function submit(clicked){
-    console.log("enabling button");
-    thisQuiz.checkAnswer(clicked);
-    thisQuiz.questions[thisQuiz.index].answered = true;
-    infoText();
-    btn.onclick = null;
-    btn.classList.add("clicked");
-    if(thisQuiz.returnAnswered() == thisQuiz.totalQuestions()){
-        setTimeout(results, 2000);
-        }
-    }
-}
 function toggleButton(clicked){
     console.log("toggle button called");
     let q = thisQuiz.returnElement(thisQuiz.index);
@@ -293,6 +282,18 @@ function toggleButton(clicked){
     else{
         q[q.length-1].onclick = function(){submit(clicked)};
         q[q.length-1].classList.remove("clicked");
+    }
+}
+
+function submit(clicked){
+    thisQuiz.checkAnswer(clicked);
+    thisQuiz.questions[thisQuiz.index].answered = true;
+    infoText();
+    thisQuiz.returnElement(thisQuiz.index)[q.length-1].onclick = null;
+    thisQuiz.returnElement(thisQuiz.index)[q.length-1].classList.add("clicked");
+    if(thisQuiz.returnAnswered() == thisQuiz.totalQuestions()){
+        setTimeout(results, 2000);
+        }
     }
 }
 
