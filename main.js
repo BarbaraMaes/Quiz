@@ -24,11 +24,11 @@ function getJSON (file) {
 }
 
 class quiz{
-    constructor(username = "Quizer", questions = [], correct = "0",incorrect ="0",index = "0"){
+    constructor(username = "Quizer", questions = [], correct = "0"/*,incorrect ="0"*/,index = "0"){
         this.username = username;
         this.questions = questions;
         this.correct = correct;
-        this.incorrect = incorrect;
+        //this.incorrect = incorrect;
         this.totalQuestions = function(){return this.questions.length;};
         this.totalScore = function(){return (this.questions.length)*10;};
         this.returnElement = function(index){return (this.questions[index].elements);};
@@ -49,36 +49,26 @@ class quiz{
     checkAnswer(clicked){
         let q = thisQuiz.returnElement(thisQuiz.index);
         let correctAnswers = thisQuiz.questions[thisQuiz.index].correct;
-        let counter = 0;
+        let check = 0;
         if(Array.isArray(correctAnswers)){
             for(let correct of correctAnswers){
                 for(let click of clicked){
                     if(correct == click){
                         q[click].setAttribute("id","correct");
-                        counter++; 
+                        check++;
                     }
                     else if(correct != click){q[click].classList.add("incorrect");}
                 } 
             }
-            if(counter == clicked.length){thisQuiz.correct++;}
-            else{thisQuiz.incorrect++;}
+            if(check == clicked.length){thisQuiz.correct++;}
         }
         //if correctanswers isn't an array
         else{
-            if(Array.isArray(clicked)){
-                counter = 0;
-                for(let click of clicked){
-                    counter++;
-                    if(correctAnswers == click) {q[click].setAttribute("id","correct");}
-                    else{q[click].classList.add("incorrect");}
-                }
-                if(counter <= 1){thisQuiz.correct++;} 
-                else if(counter > 1){thisQuiz.incorrect++;}
+            for(let click of clicked){
+                if(correctAnswers == click) {q[click].setAttribute("id","correct"); check++;}
+                else{q[click].classList.add("incorrect"); check--;}
             }
-            else{
-                if(correctAnswers == clicked){q[click].setAttribute("id","correct"); thisQuiz.correct++;}
-                else{q[click].classList.add("incorrect"); thisQuiz.incorrect++;}
-            }
+            if(check == 1){thisQuiz.correct++;} 
         }
     }
 }
