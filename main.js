@@ -24,12 +24,12 @@ function getJSON (file) {
 }
 
 class quiz{
-    constructor(username = "Quizer", questions = [], correct = "0",index = "0"){
+    constructor(username = "Spelare", questions = [], correct = "0",index = "0"){
         this.username = username;
         this.questions = questions;
         this.correct = correct;
         this.totalQuestions = function(){return this.questions.length;};
-        this.totalScore = function(){return (this.questions.length)*10;};
+        this.totalScore = function(){return (this.questions.length);};
         this.returnElement = function(index){return (this.questions[index].elements);};
         this.index = index;
 
@@ -72,7 +72,7 @@ class quiz{
 }
 
 class question {
-    constructor(category, question, answers = [], correct = [], elements = [], answered ="false"){
+    constructor(category, question, answers = [], correct = [], elements = [], answered = false){
         this.category = category;
         this.question = question;
         this.answers = answers;
@@ -104,12 +104,14 @@ intro();
 function intro(){
     let container = document.createElement("p"); 
     container.classList.add("question-text");
-    container.appendChild(document.createTextNode("Welcome to the best quiz ever! let's start with your name: "));
+    container.appendChild(document.createTextNode("Välkommen till det årliga geek-quizet 2019"));
+    container.appendChild(document.createElement("br"));
+    container.appendChild(document.createTextNode("Fyll i ditt namn."));
     document.querySelector(".question").appendChild(container);
 
     let input = document.createElement('input');
     input.type = "text";
-    input.value = "Type your name here";
+    input.value = "Skriv ditt namn här";
     input.setAttribute("class", "input-name");
     document.querySelector(".answers").appendChild(input);
     input.addEventListener("click", function(){
@@ -118,11 +120,13 @@ function intro(){
 
     let submit = document.createElement("input");
     submit.type="submit";
-    submit.value ="Submit";
+    submit.value ="Nästa";
     submit.setAttribute("class", "submit name");
     document.querySelector(".answers").appendChild(submit);
     submit.addEventListener("click",function(){
-        thisQuiz.username = "Quizer";
+        if(input.value != "Skriv ditt namn här"){
+            thisQuiz.username = input.value;
+        }
         ready();
     });
 }
@@ -132,9 +136,9 @@ function ready(){
     let container = document.createElement("p"); 
     container.classList.add("question-text");
 
-    container.appendChild(document.createTextNode("Hi "  + thisQuiz.username + " ! "));
+    container.appendChild(document.createTextNode("Hej "  + thisQuiz.username + " ! "));
     container.appendChild(document.createElement("br"));
-    container.appendChild(document.createTextNode("Are you ready to start the quiz ?"));
+    container.appendChild(document.createTextNode("Är du redo att testa dina Geek-kunskaper?"));
     
    
     document.querySelector(".question").appendChild(container);
@@ -143,7 +147,7 @@ function ready(){
     document.querySelector(".name").style.display="none";
     let ready = document.createElement("input");
     ready.type= "submit";
-    ready.value= " Yes ! ";
+    ready.value= " Ja ! ";
     ready.setAttribute("class", "submit");
     document.querySelector(".answers").appendChild(ready);
     ready.addEventListener("click", function(){
@@ -170,7 +174,7 @@ function makeQuestion(){
         submitAnswer.setAttribute("type","button");
         submitAnswer.id = "submit-answer";
         submitAnswer.classList.add("submit");
-        submitAnswer.value ="Submit";
+        submitAnswer.value ="Välj";
 
         
         elements[j] = [];
@@ -194,57 +198,112 @@ function clearContainer(){
     document.querySelector(".answers-list").innerHTML = "";
     document.querySelector(".submit-answer").innerHTML ="";
     document.querySelector(".results").style.display = "none";
+    btnNext.style.visibility ="visible";
+    btnBack.style.visibility ="visible";
 }
 
+function clearClicked(){
+    let q = thisQuiz.returnElement(thisQuiz.index);
+    if(q[q.length-1].classList.contains("clicked") != true){
+        for(j = 1; j < q.length -1; j++){
+            q[j].classList.remove("answers-list__item-clicked");
+        }
+    }
+}
 function showQuestion(){
+    clearClicked();
+    if(thisQuiz.index == 12){
+        btnNext.style.visibility ="hidden";
+    }
+    else if(thisQuiz.index == 0){
+        btnBack.style.visibility ="hidden";
+    }
+
     let clicked = [];
     infoText();
 
     let q = thisQuiz.returnElement(thisQuiz.index);
     document.querySelector(".question").appendChild(q[0]);
 
+    //disable button on show because ( nothing is clicked )
     q[q.length-1].style.display ="block";
+    q[q.length-1].onclick = null;
+    q[q.length-1].classList.add("clicked");
     document.querySelector(".submit-answer").appendChild(q[q.length -1]);
-   
+
     for(j = 0; j < q.length -2; j++){
         document.querySelector(".answers-list").appendChild(q[j+1]);
         let i = j+1;
         let timesClicked = 0;
         q[i].onclick = function(){
-        if(timesClicked % 2 == 0){
-            q[i].classList.add("answers-list__item-clicked");
-            clicked.push(i);
+            if(thisQuiz.questions[thisQuiz.index].answered == false){
+                let btn = q[q.length-1];
+                btn.classList.remove("clicked");
+                btn.onclick = function(){
+                submit(clicked);
             }
-        else if(
-            timesClicked % 2 != 0){q[i].classList.remove("answers-list__item-clicked");
-            let place = clicked.indexOf(i);
-            clicked.splice(place, 1);
-            }
-        timesClicked++;
-        }
-        if(q[q.length-1].classList.contains("clicked")){q[i].onclick = null;}
-    }    
-    if(q[q.length-1].classList.contains("clicked") !=true){
-        let btn = q[q.length-1];
 
-        btn.onclick = function(){
-        thisQuiz.checkAnswer(clicked);
-        thisQuiz.questions[thisQuiz.index].answered = true;
-        infoText();
-        btn.onclick = null;
-        btn.classList.add("clicked");
-
-        if(thisQuiz.returnAnswered() == thisQuiz.totalQuestions()){
-            setTimeout(results, 2000);
+            if(timesClicked % 2 == 0){
+                q[i].classList.add("answers-list__item-clicked");
+                clicked.push(i);
             }
+            else if(timesClicked % 2 != 0){
+                q[i].classList.remove("answers-list__item-clicked");
+                let place = clicked.indexOf(i);
+                clicked.splice(place, 1);
+            }
+            timesClicked++;
         }
+        if(thisQuiz.questions[thisQuiz.index].answered == true){q[i].onclick = null;}
+    } 
+    document.querySelector(".answers-list").onclick = function(){toggleButton(clicked);}    
+}
+
+function submit(clicked){
+    console.log("enabling button");
+    thisQuiz.checkAnswer(clicked);
+    thisQuiz.questions[thisQuiz.index].answered = true;
+    infoText();
+    btn.onclick = null;
+    btn.classList.add("clicked");
+    if(thisQuiz.returnAnswered() == thisQuiz.totalQuestions()){
+        setTimeout(results, 2000);
+        }
+    }
+}
+function toggleButton(clicked){
+    console.log("toggle button called");
+    let q = thisQuiz.returnElement(thisQuiz.index);
+    if((Array.isArray(thisQuiz.questions[thisQuiz.index].correct) == false) && (clicked.length > 1)||(clicked.length == 0)){
+        q[q.length-1].onclick = null;
+        q[q.length-1].classList.add("clicked");
+        console.log("disable button");
+    }
+    else if((thisQuiz.questions[thisQuiz.index].correct.length != undefined)){
+        if((thisQuiz.questions[thisQuiz.index].correct.length != clicked.length)){
+            q[q.length-1].onclick = null;
+            q[q.length-1].classList.add("clicked");
+            console.log("disable button else if");
+        }
+        else{
+            q[q.length-1].onclick = function(){submit(clicked)};
+            q[q.length-1].classList.remove("clicked");
+        }
+    }
+    else{
+        q[q.length-1].onclick = function(){submit(clicked)};
+        q[q.length-1].classList.remove("clicked");
     }
 }
 
 function infoText(){
-    document.querySelector(".question-info").innerHTML = "Question : <br\>" + parseInt(thisQuiz.index +1) + " of " + thisQuiz.totalQuestions();
-    document.querySelector(".score-info").innerHTML = "Score : <br\>" + (thisQuiz.correct)*10 + " of " + thisQuiz.totalScore();
-    document.querySelector(".answered").innerHTML = "Answered : <br\>" + (thisQuiz.returnAnswered()) + " of " + thisQuiz.totalQuestions();
+    document.querySelector(".question-info").innerHTML = "Fråga : <br\>" + parseInt(thisQuiz.index +1) + " av " + thisQuiz.totalQuestions();
+    document.querySelector(".score-info").innerHTML = "Poäng : <br\>" + (thisQuiz.correct) + " av " + thisQuiz.totalScore();
+    document.querySelector(".answered").innerHTML = "Besvarade : <br\>" + (thisQuiz.returnAnswered()) + " av " + thisQuiz.totalQuestions();
+    let dash = document.querySelectorAll(".dash");
+    for(item of dash){
+        item.innerHTML = " | ";
+    }
 }
 
 function nextQuestion(){
@@ -277,7 +336,9 @@ function fillQuestionList(){
         let question = document.createTextNode((j+1) + ". " + q.question);
         let listItem = document.createElement("li");
         listItem.addEventListener("click", function(){
-            thisQuiz.index = this.innerHTML[0] -1;
+            var pos = this.innerHTML.indexOf(".");
+            thisQuiz.index = this.innerHTML.slice(0, pos) -1;
+            console.log(thisQuiz.index);
             toggleQuestionList();
             clearContainer();
             showQuestion();
@@ -303,6 +364,7 @@ function toggleQuestionList(){
 
 function results(){
     clearContainer();
+    document.querySelector(".buttons").style.display = "none";
 
     let text = document.createTextNode("Results");
     let element = document.createElement("p");
@@ -311,10 +373,11 @@ function results(){
     document.querySelector(".question").appendChild(element);
     let results = document.querySelector(".results");
     results.style.display = "block";
+
     document.querySelector(".total_questions").appendChild(document.createTextNode(" " + thisQuiz.totalQuestions()));
     document.querySelector(".result_corr").appendChild(document.createTextNode(" " + thisQuiz.correct));
     document.querySelector(".result_incorr").appendChild(document.createTextNode(" " + thisQuiz.totalQuestions() - thisQuiz.correct));
-    document.querySelector(".percentage").appendChild(document.createTextNode(" " + (thisQuiz.correct/thisQuiz.totalQuestions())*100 + " %"));
+    document.querySelector(".percentage").appendChild(document.createTextNode(" " + Math.round(((thisQuiz.correct/thisQuiz.totalQuestions())*100)) + " %"));
 
 }
 

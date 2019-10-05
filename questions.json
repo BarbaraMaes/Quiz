@@ -1,38 +1,81 @@
 [
         {
-            "category" : "randon",
-            "question" : "Lorem ipsum dolor sit amet, consectetur adipiscing elit", 
-            "answers" : ["minim veniam, quis nostrud exercitation ullamco laboris nisi", "answer 2", "answer 3"],
-            "correct" : 2,
-            "answered" : false
+            "category" : "TV/Film",
+            "question" : "Vilken skådespelare har inte medverkat i Harry Potter filmerna?", 
+            "answers" : ["Daniel Radcliffe", "Richard Harris" , "Emma Watson" , "Eddie Murphy"],
+            "correct" : 4
         },
         {
-            "category" : "randon",
-            "question" : "random question 2", 
-            "answers" : ["Answer 1", "answer 2", "answer 3", "answer 4"],
-            "correct" : [1,4],
-            "answered" : false
+            "category" : "Spel",
+            "question" : "Välj de spel som är exklusiva till en enda konsol. (Välj två)", 
+            "answers" : ["The Last of Us", "Call of Duty", "Assassin’s Creed", "Zelda"],
+            "correct" : [1,4]
         },
         {
-            "category" : "randon",
-            "question" : "random question 3", 
-            "answers" : ["Answer 1", "answer 2", "answer 3"],
-            "correct" : 3,
-            "answered" : false
+            "category" : "Spel",
+            "question" : "Vilka av dessa spel är skapade av svenska spelutvecklare? (Välj 3)", 
+            "answers" : ["Battlefield" , "Unravel" , "Trine" , "Minecraft", "Banner Saga"],
+            "correct" : [1,2,4]
         },
         {
-            "category" : "randon",
-            "question" : "random question 4", 
-            "answers" : ["Answer 1", "answer 2", "answer 3"],
-            "correct" : 2,
-            "answered" : false
+            "category" : "TV/Film",
+            "question" : "Vilket är Supermans alter ego? ", 
+            "answers" : ["Lois Lane", "Bruce Wayne" , "Clark Kent"],
+            "correct" : 3
         },
         {
-            "category" : "randon",
-            "question" : "random question 5", 
-            "answers" : ["Answer 1", "answer 2", "answer 3"],
-            "correct" : [1,4],
-            "answered" : false
+            "category" : "TV/Film",
+            "question" : "Vilken av dessa planeter är Luke Skywalkers hemplanet i Star Wars?", 
+            "answers" : ["Tatooine", "Naboo" ,"Alderaan" ,"Death Star"],
+            "correct" : 1
+        },
+        {
+            "category" : "TV/Film",
+            "question" : "Vilket av dessa kärnämnen var inte studerat av förstaårs studenterna på Hogwarts?",
+            "answers" : ["Charms", "Defense against the Dark Arts", "Herbology",  "Divination"],
+            "correct" : 4     
+        },
+        {
+            "category" : "Spel",
+            "question" : "Vilket av följande spel är inte ett i Mario Bros. serien?", 
+            "answers" : ["Super Mario Galaxy", "Super Mario Blast", "Super Mario 64", "Super Mario Sunshine"],
+            "correct" : 2
+        },
+        {
+            "category" : "TV/Film",
+            "question" : "Spock från Star Trek är hälften människa och hälften ...", 
+            "answers" : ["Vorta", "Borg" ,"Vulcan" , "Xindi"],
+            "correct" : 3
+        },
+        {
+            "category" : "Spel",
+            "question" : "Vilket år släpptes tv-spelet Pong? ",
+            "answers" : ["1982", "1985" , "1972" , "1970"],
+            "correct" : 3
+        },
+        {
+            "category" : "Spel",
+            "question" : "Vilken är listad som den första pokemonen i Pokedex ?",
+            "answers" : ["Charmander", "Bulbasaur", "Squirtle", "Pikachu"],
+            "correct" : 2
+        },
+        {
+            "category" : "Spel",
+            "question" : "Vem är inte en fiende i Mario Bros. serien?", 
+            "answers" : ["Goomba" ,"Bowser", "Toad", "Shy Guy"],
+            "correct" : 3
+        },
+        {
+            "category" : "TV/Film",
+            "question" : "Vilka superhjältar var med i Avengers? (välj 3)",
+            "answers" : ["Spiderman", "The Hulk", "Batman", "Thor", "Hawkeye"],
+            "correct" : [2,4,5]
+        },
+        {
+            "category" :"TV/Film",
+            "question" : "Vad heter isplaneten från Star Wars Episode V?",
+            "answers" : ["Hoth", "Bespin", "Tatooine", "Dagobah"],
+            "correct" : 1
         }
     
 ]
