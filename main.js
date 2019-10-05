@@ -24,15 +24,13 @@ function getJSON (file) {
 }
 
 class quiz{
-    constructor(username = "Quizer", questions = [], correct = "0"/*,incorrect ="0"*/,index = "0"){
+    constructor(username = "Quizer", questions = [], correct = "0",index = "0"){
         this.username = username;
         this.questions = questions;
         this.correct = correct;
-        //this.incorrect = incorrect;
         this.totalQuestions = function(){return this.questions.length;};
         this.totalScore = function(){return (this.questions.length)*10;};
         this.returnElement = function(index){return (this.questions[index].elements);};
-        
         this.index = index;
 
     }
@@ -164,7 +162,9 @@ function makeQuestion(){
         let q = thisQuiz.questions[j];
         let question = document.createTextNode((j +1) + ". " + q.question);
         let container = document.createElement("p");
-        
+        container.classList.add("question-text");
+        container.appendChild(question);
+
         let submitAnswer = document.createElement("input");
 
         submitAnswer.setAttribute("type","button");
@@ -172,8 +172,7 @@ function makeQuestion(){
         submitAnswer.classList.add("submit");
         submitAnswer.value ="Submit";
 
-        container.classList.add("question-text");
-        container.appendChild(question);
+        
         elements[j] = [];
         elements[j][0] = container;
         for(i = 0; i < q.answers.length; i++){
@@ -194,6 +193,7 @@ function clearContainer(){
     document.querySelector(".question").innerHTML = "";
     document.querySelector(".answers-list").innerHTML = "";
     document.querySelector(".submit-answer").innerHTML ="";
+    document.querySelector(".results").style.display = "none";
 }
 
 function showQuestion(){
@@ -222,18 +222,21 @@ function showQuestion(){
             }
         timesClicked++;
         }
-
         if(q[q.length-1].classList.contains("clicked")){q[i].onclick = null;}
-    }     
-    
+    }    
     if(q[q.length-1].classList.contains("clicked") !=true){
         let btn = q[q.length-1];
+
         btn.onclick = function(){
         thisQuiz.checkAnswer(clicked);
         thisQuiz.questions[thisQuiz.index].answered = true;
         infoText();
         btn.onclick = null;
         btn.classList.add("clicked");
+
+        if(thisQuiz.returnAnswered() == thisQuiz.totalQuestions()){
+            setTimeout(results, 2000);
+            }
         }
     }
 }
@@ -296,6 +299,23 @@ function toggleQuestionList(){
         container.style.display ="none";
         backdrop.style.display="none";
     }
+}
+
+function results(){
+    clearContainer();
+
+    let text = document.createTextNode("Results");
+    let element = document.createElement("p");
+    element.classList.add("question-text");
+    element.appendChild(text);
+    document.querySelector(".question").appendChild(element);
+    let results = document.querySelector(".results");
+    results.style.display = "block";
+    document.querySelector(".total_questions").appendChild(document.createTextNode(" " + thisQuiz.totalQuestions()));
+    document.querySelector(".result_corr").appendChild(document.createTextNode(" " + thisQuiz.correct));
+    document.querySelector(".result_incorr").appendChild(document.createTextNode(" " + thisQuiz.totalQuestions() - thisQuiz.correct));
+    document.querySelector(".percentage").appendChild(document.createTextNode(" " + (thisQuiz.correct/thisQuiz.totalQuestions())*100 + " %"));
+
 }
 
 
