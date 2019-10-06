@@ -120,6 +120,19 @@ main{
     font-weight:bold;
     font-size: 1rem;
 }
+.intro{
+    text-align: center;
+    /*display:inline-block;
+    height:fit-content;*/
+    /*display:grid;
+    grid-template-rows: 3rem 3rem auto 3rem;*/
+   /* grid-area: answers;
+    align-content: start;*/
+}
+.ready{
+    display:none;
+    text-align: center;
+}
 .submit:focus{
     outline:none;
 }
@@ -246,6 +259,9 @@ main{
 }
 .question-list li:hover{
     color:grey;
+}
+#hide{
+    display: none;
 }
 @media(min-width: 567px){ 
     html{

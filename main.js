@@ -34,6 +34,7 @@ class quiz{
         this.index = index;
 
     }
+    //returns the amount of questions answered
     returnAnswered(){
         let counter = 0;
         for(question of this.questions){
@@ -43,11 +44,12 @@ class quiz{
         }
         return counter;
     }
-
+    //checks chosen answer against right answer
     checkAnswer(clicked){
         let q = thisQuiz.returnElement(thisQuiz.index);
         let correctAnswers = thisQuiz.questions[thisQuiz.index].correct;
         let check = 0;
+        //if multiple answers
         if(Array.isArray(correctAnswers)){
             for(let correct of correctAnswers){
                 for(let click of clicked){
@@ -62,15 +64,12 @@ class quiz{
         }
         //if correctanswers isn't an array
         else{
-            for(let click of clicked){
-                if(correctAnswers == click) {q[click].setAttribute("id","correct"); check++;}
-                else{q[click].classList.add("incorrect"); check--;}
-            }
-            if(check == 1){thisQuiz.correct++;} 
+            if(correctAnswers == clicked) {q[clicked].setAttribute("id","correct"); thisQuiz.correct++;}
+            else{q[clicked].classList.add("incorrect");}
         }
     }
 }
-
+//questions read from JSON file, elements added dynamically in makeQuestion
 class question {
     constructor(category, question, answers = [], correct = [], elements = [], answered = false){
         this.category = category;
@@ -90,6 +89,7 @@ for(let item of json){
     thisQuiz.questions.push(x);
 }
 
+//next, back button and question list eventlisteners
 const btnNext = document.querySelector(".next");
 const btnBack = document.querySelector(".back");
 const icon = document.querySelector(".icon-container");
@@ -101,7 +101,9 @@ backdrop.addEventListener("click", toggleQuestionList);
 
 intro();
 
+//welcomes and asks for name.
 function intro(){
+    //welcome text
     let container = document.createElement("p"); 
     container.classList.add("question-text");
     container.appendChild(document.createTextNode("Välkommen till det årliga geek-quizet 2019"));
@@ -109,6 +111,7 @@ function intro(){
     container.appendChild(document.createTextNode("Fyll i ditt namn."));
     document.querySelector(".question").appendChild(container);
 
+    //textbox for name input
     let input = document.createElement('input');
     input.type = "text";
     input.value = "Skriv ditt namn här";
@@ -118,6 +121,7 @@ function intro(){
         input.value="";
     })
 
+    //submit name button
     let submit = document.createElement("input");
     submit.type="submit";
     submit.value ="Nästa";
@@ -131,6 +135,7 @@ function intro(){
     });
 }
 
+//Welcomes the user by name, ready start the quiz.
 function ready(){
     clearContainer();
     let container = document.createElement("p"); 
@@ -143,23 +148,28 @@ function ready(){
    
     document.querySelector(".question").appendChild(container);
     
+    //hides intro elements
     document.querySelector(".input-name").style.display ="none";
     document.querySelector(".name").style.display="none";
+
+    //submit button
     let ready = document.createElement("input");
     ready.type= "submit";
     ready.value= " Ja ! ";
     ready.setAttribute("class", "submit");
     document.querySelector(".answers").appendChild(ready);
-    ready.addEventListener("click", function(){
+
+    ready.onclick = function(){
         ready.style.display ="none";
         btnNext.style.display = "initial";
         btnBack.style.display = "initial";
         clearContainer();
         fillQuestionList();
         makeQuestion();
-    });
+    }
 }
 
+//make HTML elements for the questions, store them in elements array. 
 function makeQuestion(){
     let elements = [];
     for(j = 0; j < thisQuiz.questions.length; j++){
@@ -193,6 +203,7 @@ function makeQuestion(){
     showQuestion();
 }
 
+//clear the container so next question can be shown
 function clearContainer(){
     document.querySelector(".question").innerHTML = "";
     document.querySelector(".answers-list").innerHTML = "";
@@ -202,6 +213,7 @@ function clearContainer(){
     btnBack.style.visibility ="visible";
 }
 
+//removes clicked answers if they're not submitted (when scrolling through questions)
 function clearClicked(){
     let q = thisQuiz.returnElement(thisQuiz.index);
     if(q[q.length-1].classList.contains("clicked") != true){
@@ -210,14 +222,19 @@ function clearClicked(){
         }
     }
 }
+
+//shows HTML elements for chosen question. 
 function showQuestion(){
     clearClicked();
+
+    //hide next and back button when on last or first question
     if(thisQuiz.index == 12){
         btnNext.style.visibility ="hidden";
     }
     else if(thisQuiz.index == 0){
         btnBack.style.visibility ="hidden";
     }
+
 
     let clicked = [];
     infoText();
@@ -231,12 +248,12 @@ function showQuestion(){
     q[q.length-1].classList.add("clicked");
     document.querySelector(".submit-answer").appendChild(q[q.length -1]);
 
+    //adds click event to list items (answers)
     for(j = 0; j < q.length -2; j++){
         document.querySelector(".answers-list").appendChild(q[j+1]);
         let i = j+1;
         let timesClicked = 0;
         q[i].onclick = function(){
-            console.log(thisQuiz.questions[thisQuiz.index].answered);
             if(thisQuiz.questions[thisQuiz.index].answered == false){
                 let btn = q[q.length-1];
                 btn.classList.remove("clicked");
@@ -244,6 +261,7 @@ function showQuestion(){
                 submit(clicked);
             }
 
+            //set item as clicked on first click, remove from clicked on second click
             if(timesClicked % 2 == 0){
                 q[i].classList.add("answers-list__item-clicked");
                 clicked.push(i);
@@ -255,24 +273,25 @@ function showQuestion(){
             }
             timesClicked++;
         }
+        //disable list item onclick if question has been answered
         if(thisQuiz.questions[thisQuiz.index].answered == true){q[i].onclick = null;}
     } 
+    //enable submit button when right amount of answers are chosen
     document.querySelector(".answers-list").onclick = function(){toggleButton(clicked);}    
 }
 
+//enable submit button when right amount of answers are chosen
 function toggleButton(clicked){
-    console.log("toggle button called");
+     //disable button if amount of correct answers does not equal amount of chosen answers
     let q = thisQuiz.returnElement(thisQuiz.index);
     if((Array.isArray(thisQuiz.questions[thisQuiz.index].correct) == false) && (clicked.length > 1)||(clicked.length == 0)){
         q[q.length-1].onclick = null;
         q[q.length-1].classList.add("clicked");
-        console.log("disable button");
     }
     else if((thisQuiz.questions[thisQuiz.index].correct.length != undefined)){
         if((thisQuiz.questions[thisQuiz.index].correct.length != clicked.length)){
             q[q.length-1].onclick = null;
             q[q.length-1].classList.add("clicked");
-            console.log("disable button else if");
         }
         else{
             q[q.length-1].onclick = function(){submit(clicked)};
@@ -285,18 +304,21 @@ function toggleButton(clicked){
     }
 }
 
+//calls when answer is submitted, checks answers, disables button. 
 function submit(clicked){
     thisQuiz.checkAnswer(clicked);
     thisQuiz.questions[thisQuiz.index].answered = true;
     infoText();
     thisQuiz.returnElement(thisQuiz.index)[q.length-1].onclick = null;
     thisQuiz.returnElement(thisQuiz.index)[q.length-1].classList.add("clicked");
+    //shows results if all questions are answered
     if(thisQuiz.returnAnswered() == thisQuiz.totalQuestions()){
         setTimeout(results, 2000);
         }
     }
 }
 
+//shows questions, score and answered
 function infoText(){
     document.querySelector(".question-info").innerHTML = "Fråga : <br\>" + parseInt(thisQuiz.index +1) + " av " + thisQuiz.totalQuestions();
     document.querySelector(".score-info").innerHTML = "Poäng : <br\>" + (thisQuiz.correct) + " av " + thisQuiz.totalScore();
@@ -323,6 +345,7 @@ function previousQuestion(){
     }
 }
 
+//toggles question list menu, fills question list with questions
 function fillQuestionList(){
     document.querySelector(".icon-text").style.color ="black";
     let bars = document.querySelectorAll(".bar");
@@ -330,16 +353,15 @@ function fillQuestionList(){
         bar.style.backgroundColor="black";
     }
     
-
     let container = document.querySelector(".question-list");
     for(j = 0; j < thisQuiz.questions.length; j++){
         let q = thisQuiz.questions[j];
         let question = document.createTextNode((j+1) + ". " + q.question);
         let listItem = document.createElement("li");
+        //shows chosen question on click
         listItem.addEventListener("click", function(){
             var pos = this.innerHTML.indexOf(".");
             thisQuiz.index = this.innerHTML.slice(0, pos) -1;
-            console.log(thisQuiz.index);
             toggleQuestionList();
             clearContainer();
             showQuestion();
@@ -349,6 +371,7 @@ function fillQuestionList(){
     }
 }
 
+//hides and shows question list and backdrop. 
 function toggleQuestionList(){
     let container = document.querySelector(".question-list__container");
     let display = window.getComputedStyle(container).getPropertyValue("display");
@@ -363,11 +386,12 @@ function toggleQuestionList(){
     }
 }
 
+//shows results when all questions are answered
 function results(){
     clearContainer();
     document.querySelector(".buttons").style.display = "none";
 
-    let text = document.createTextNode("Results");
+    let text = document.createTextNode("Resultat");
     let element = document.createElement("p");
     element.classList.add("question-text");
     element.appendChild(text);
